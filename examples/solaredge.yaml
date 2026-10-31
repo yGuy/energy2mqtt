@@ -1,0 +1,27 @@
+# Replace these MQTT settings and the inverter's example IP address.
+mqtt:
+  host: mqtt.example.com
+  port: 1883
+  user: energy2mqtt
+  pass: change-me
+  ha_enabled: true
+
+modbus:
+  hubs:
+    - name: solaredge
+      host: 192.0.2.10
+      port: 502
+      proto: TCP
+      devices:
+        - name: solaredge_inverter
+          meter: solaredge/inverter
+          slave_id: 1
+          read_interval: 10
+        - name: solaredge_meter_1
+          meter: solaredge/meter
+          slave_id: 1
+          read_interval: 10
+        - name: solaredge_battery_1
+          meter: solaredge/battery
+          slave_id: 1
+          read_interval: 10

@@ -1,6 +1,25 @@
 use log::error;
 
-use crate::metering_modbus::registers::{self, Register, Endianess};
+use crate::metering_modbus::registers::{self, Register, Endianess, WordOrder};
+
+/// Combine the requested words without changing the byte order within a word.
+pub fn decode_register_words(words: &[u16], length: usize, order: WordOrder) -> Result<u64, String> {
+    if length == 0 || length > 4 || words.len() < length {
+        return Err(format!("Expected {} words, received {}", length, words.len()));
+    }
+
+    let words = &words[..length];
+    let mut value = 0_u64;
+    for index in 0..length {
+        let index = if order == WordOrder::LowFirst {
+            length - 1 - index
+        } else {
+            index
+        };
+        value = (value << 16) | u64::from(words[index]);
+    }
+    Ok(value)
+}
 
 macro_rules! handle_endianess {
     ($input:expr, $endianess:expr) => {

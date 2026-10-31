@@ -14,6 +14,9 @@ pub mod set_device_parms;
 pub mod ha_config;
 pub mod utils;
 
+#[cfg(test)]
+mod solaredge_tests;
+
 /// Errors that can occur during Modbus communication
 #[derive(Debug)]
 pub enum ModbusError {
@@ -444,6 +447,7 @@ fn change_register(command: &ModbusMqttCommand, device: &mut ModbusDevice, inser
                                 cloned_register.input_type = change.input_type.clone();
                                 cloned_register.length = change.length;
                                 cloned_register.format = change.format.clone();
+                                cloned_register.word_order = change.word_order;
                                 cloned_register.scaler = change.scaler;
 
                                 info!("Replacing register definition for {} @ {}", change.name, change.register);
@@ -469,6 +473,7 @@ fn change_register(command: &ModbusMqttCommand, device: &mut ModbusDevice, inser
                 length: change.length,
                 format: change.format.clone(),
                 endianess: change.endianess.clone(),
+                word_order: change.word_order,
                 scaler: change.scaler,
                 precision: change.precision,
                 scale_factor: change.scale_factor.clone(),

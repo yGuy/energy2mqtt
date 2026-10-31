@@ -29,6 +29,7 @@ pub enum ModbusRegisterFormat {
     Int32,
     UInt16,
     UInt32,
+    UInt64,
     Float32,
     String,
     HexString,
@@ -42,6 +43,15 @@ pub enum ModbusRegisterFormat {
 pub enum Endianess {
     Big,
     Little,
+}
+
+/// Order of 16-bit words when reading multi-register numeric values.
+/// Bytes within each Modbus word remain big-endian.
+#[derive(Clone, Copy, Default, PartialEq, Deserialize)]
+pub enum WordOrder {
+    #[default]
+    HighFirst,
+    LowFirst,
 }
 
 #[derive(Clone, PartialEq, Deserialize)]
@@ -78,6 +88,8 @@ pub struct ModbusRegister {
     pub format: ModbusRegisterFormat,
     #[serde(default="default_endianess")]
     pub endianess: Endianess,
+    #[serde(default)]
+    pub word_order: WordOrder,
     #[serde(default="default_scaler")]
     pub scaler: f32,
     #[serde(default="default_precision")]

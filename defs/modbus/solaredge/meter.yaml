@@ -1,0 +1,725 @@
+# SolarEdge meter, EnergyExporter Index: 0.
+# Addresses are zero-based PDU addresses; do not subtract or add 1.
+# Derived from MarcusWichelmann/EnergyExporter (MIT); see LICENSE.EnergyExporter.
+# See README.md for scope, configuration, and register-map references.
+# Scale factors must precede the values that reference them.
+manufacturer: SolarEdge
+model: SunSpec meter 1 (integer map)
+registers:
+  - name: ac_current_sf
+    input_type: Holding
+    register: 40194
+    length: 1
+    format: SunSSF
+
+  - name: ac_voltage_avg_sf
+    input_type: Holding
+    register: 40203
+    length: 1
+    format: SunSSF
+
+  - name: ac_frequency_sf
+    input_type: Holding
+    register: 40205
+    length: 1
+    format: SunSSF
+
+  - name: ac_power_sf
+    input_type: Holding
+    register: 40210
+    length: 1
+    format: SunSSF
+
+  - name: ac_power_apparent_sf
+    input_type: Holding
+    register: 40215
+    length: 1
+    format: SunSSF
+
+  - name: ac_power_reactive_sf
+    input_type: Holding
+    register: 40220
+    length: 1
+    format: SunSSF
+
+  - name: ac_power_factor_sf
+    input_type: Holding
+    register: 40225
+    length: 1
+    format: SunSSF
+
+  - name: exported_energy_sf
+    input_type: Holding
+    register: 40242
+    length: 1
+    format: SunSSF
+
+  - name: exported_energy_apparent_sf
+    input_type: Holding
+    register: 40259
+    length: 1
+    format: SunSSF
+
+  - name: imported_energy_reactive_q1_sf
+    input_type: Holding
+    register: 40292
+    length: 1
+    format: SunSSF
+
+  - name: manufacturer
+    input_type: Holding
+    register: 40123
+    length: 16
+    format: String
+
+  - name: model
+    input_type: Holding
+    register: 40139
+    length: 16
+    format: String
+
+  - name: option
+    input_type: Holding
+    register: 40155
+    length: 8
+    format: String
+
+  - name: version
+    input_type: Holding
+    register: 40163
+    length: 8
+    format: String
+
+  - name: serial_number
+    input_type: Holding
+    register: 40171
+    length: 16
+    format: String
+
+  - name: device_address
+    input_type: Holding
+    register: 40187
+    length: 1
+    format: UInt16
+
+  - name: type
+    input_type: Holding
+    register: 40188
+    length: 1
+    format: UInt16
+
+  - name: ac_current
+    input_type: Holding
+    register: 40190
+    length: 1
+    format: Int16
+    scale_factor: ac_current_sf
+    unit_of_measurement: A
+    device_class: current
+    state_class: measurement
+
+  - name: ac_current_p1
+    input_type: Holding
+    register: 40191
+    length: 1
+    format: Int16
+    scale_factor: ac_current_sf
+    unit_of_measurement: A
+    device_class: current
+    state_class: measurement
+
+  - name: ac_current_p2
+    input_type: Holding
+    register: 40192
+    length: 1
+    format: Int16
+    scale_factor: ac_current_sf
+    unit_of_measurement: A
+    device_class: current
+    state_class: measurement
+
+  - name: ac_current_p3
+    input_type: Holding
+    register: 40193
+    length: 1
+    format: Int16
+    scale_factor: ac_current_sf
+    unit_of_measurement: A
+    device_class: current
+    state_class: measurement
+
+  - name: ac_voltage_avg
+    input_type: Holding
+    register: 40195
+    length: 1
+    format: Int16
+    scale_factor: ac_voltage_avg_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p1
+    input_type: Holding
+    register: 40196
+    length: 1
+    format: Int16
+    scale_factor: ac_voltage_avg_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p2
+    input_type: Holding
+    register: 40197
+    length: 1
+    format: Int16
+    scale_factor: ac_voltage_avg_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p3
+    input_type: Holding
+    register: 40198
+    length: 1
+    format: Int16
+    scale_factor: ac_voltage_avg_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_line_to_line_avg
+    input_type: Holding
+    register: 40199
+    length: 1
+    format: Int16
+    scale_factor: ac_voltage_avg_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p1_to_p2
+    input_type: Holding
+    register: 40200
+    length: 1
+    format: Int16
+    scale_factor: ac_voltage_avg_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p2_to_p3
+    input_type: Holding
+    register: 40201
+    length: 1
+    format: Int16
+    scale_factor: ac_voltage_avg_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p3_to_p1
+    input_type: Holding
+    register: 40202
+    length: 1
+    format: Int16
+    scale_factor: ac_voltage_avg_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_frequency
+    input_type: Holding
+    register: 40204
+    length: 1
+    format: Int16
+    scale_factor: ac_frequency_sf
+    unit_of_measurement: Hz
+    device_class: frequency
+    state_class: measurement
+
+  - name: ac_power
+    input_type: Holding
+    register: 40206
+    length: 1
+    format: Int16
+    scale_factor: ac_power_sf
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: ac_power_p1
+    input_type: Holding
+    register: 40207
+    length: 1
+    format: Int16
+    scale_factor: ac_power_sf
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: ac_power_p2
+    input_type: Holding
+    register: 40208
+    length: 1
+    format: Int16
+    scale_factor: ac_power_sf
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: ac_power_p3
+    input_type: Holding
+    register: 40209
+    length: 1
+    format: Int16
+    scale_factor: ac_power_sf
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: ac_power_apparent
+    input_type: Holding
+    register: 40211
+    length: 1
+    format: Int16
+    scale_factor: ac_power_apparent_sf
+    unit_of_measurement: VA
+    device_class: apparent_power
+    state_class: measurement
+
+  - name: ac_power_apparent_p1
+    input_type: Holding
+    register: 40212
+    length: 1
+    format: Int16
+    scale_factor: ac_power_apparent_sf
+    unit_of_measurement: VA
+    device_class: apparent_power
+    state_class: measurement
+
+  - name: ac_power_apparent_p2
+    input_type: Holding
+    register: 40213
+    length: 1
+    format: Int16
+    scale_factor: ac_power_apparent_sf
+    unit_of_measurement: VA
+    device_class: apparent_power
+    state_class: measurement
+
+  - name: ac_power_apparent_p3
+    input_type: Holding
+    register: 40214
+    length: 1
+    format: Int16
+    scale_factor: ac_power_apparent_sf
+    unit_of_measurement: VA
+    device_class: apparent_power
+    state_class: measurement
+
+  - name: ac_power_reactive
+    input_type: Holding
+    register: 40216
+    length: 1
+    format: Int16
+    scale_factor: ac_power_reactive_sf
+    unit_of_measurement: var
+    device_class: reactive_power
+    state_class: measurement
+
+  - name: ac_power_reactive_p1
+    input_type: Holding
+    register: 40217
+    length: 1
+    format: Int16
+    scale_factor: ac_power_reactive_sf
+    unit_of_measurement: var
+    device_class: reactive_power
+    state_class: measurement
+
+  - name: ac_power_reactive_p2
+    input_type: Holding
+    register: 40218
+    length: 1
+    format: Int16
+    scale_factor: ac_power_reactive_sf
+    unit_of_measurement: var
+    device_class: reactive_power
+    state_class: measurement
+
+  - name: ac_power_reactive_p3
+    input_type: Holding
+    register: 40219
+    length: 1
+    format: Int16
+    scale_factor: ac_power_reactive_sf
+    unit_of_measurement: var
+    device_class: reactive_power
+    state_class: measurement
+
+  - name: ac_power_factor
+    input_type: Holding
+    register: 40221
+    length: 1
+    format: Int16
+    scale_factor: ac_power_factor_sf
+    unit_of_measurement: '%'
+    device_class: power_factor
+    state_class: measurement
+
+  - name: ac_power_factor_p1
+    input_type: Holding
+    register: 40222
+    length: 1
+    format: Int16
+    scale_factor: ac_power_factor_sf
+    unit_of_measurement: '%'
+    device_class: power_factor
+    state_class: measurement
+
+  - name: ac_power_factor_p2
+    input_type: Holding
+    register: 40223
+    length: 1
+    format: Int16
+    scale_factor: ac_power_factor_sf
+    unit_of_measurement: '%'
+    device_class: power_factor
+    state_class: measurement
+
+  - name: ac_power_factor_p3
+    input_type: Holding
+    register: 40224
+    length: 1
+    format: Int16
+    scale_factor: ac_power_factor_sf
+    unit_of_measurement: '%'
+    device_class: power_factor
+    state_class: measurement
+
+  - name: exported_energy
+    input_type: Holding
+    register: 40226
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_sf
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: exported_energy_p1
+    input_type: Holding
+    register: 40228
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_sf
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: exported_energy_p2
+    input_type: Holding
+    register: 40230
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_sf
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: exported_energy_p3
+    input_type: Holding
+    register: 40232
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_sf
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: imported_energy
+    input_type: Holding
+    register: 40234
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_sf
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: imported_energy_p1
+    input_type: Holding
+    register: 40236
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_sf
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: imported_energy_p2
+    input_type: Holding
+    register: 40238
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_sf
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: imported_energy_p3
+    input_type: Holding
+    register: 40240
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_sf
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: exported_energy_apparent
+    input_type: Holding
+    register: 40243
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_apparent_sf
+    unit_of_measurement: VAh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_apparent_p1
+    input_type: Holding
+    register: 40245
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_apparent_sf
+    unit_of_measurement: VAh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_apparent_p2
+    input_type: Holding
+    register: 40247
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_apparent_sf
+    unit_of_measurement: VAh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_apparent_p3
+    input_type: Holding
+    register: 40249
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_apparent_sf
+    unit_of_measurement: VAh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_apparent
+    input_type: Holding
+    register: 40251
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_apparent_sf
+    unit_of_measurement: VAh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_apparent_p1
+    input_type: Holding
+    register: 40253
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_apparent_sf
+    unit_of_measurement: VAh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_apparent_p2
+    input_type: Holding
+    register: 40255
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_apparent_sf
+    unit_of_measurement: VAh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_apparent_p3
+    input_type: Holding
+    register: 40257
+    length: 2
+    format: UInt32
+    scale_factor: exported_energy_apparent_sf
+    unit_of_measurement: VAh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_reactive_q1
+    input_type: Holding
+    register: 40260
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_reactive_q1_p1
+    input_type: Holding
+    register: 40262
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_reactive_q1_p2
+    input_type: Holding
+    register: 40264
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_reactive_q1_p3
+    input_type: Holding
+    register: 40266
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_reactive_q2
+    input_type: Holding
+    register: 40268
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_reactive_q2_p1
+    input_type: Holding
+    register: 40270
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_reactive_q2_p2
+    input_type: Holding
+    register: 40272
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: imported_energy_reactive_q2_p3
+    input_type: Holding
+    register: 40274
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_reactive_q3
+    input_type: Holding
+    register: 40276
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_reactive_q3_p1
+    input_type: Holding
+    register: 40278
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_reactive_q3_p2
+    input_type: Holding
+    register: 40280
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_reactive_q3_p3
+    input_type: Holding
+    register: 40282
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_reactive_q4
+    input_type: Holding
+    register: 40284
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_reactive_q4_p1
+    input_type: Holding
+    register: 40286
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_reactive_q4_p2
+    input_type: Holding
+    register: 40288
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: exported_energy_reactive_q4_p3
+    input_type: Holding
+    register: 40290
+    length: 2
+    format: UInt32
+    scale_factor: imported_energy_reactive_q1_sf
+    unit_of_measurement: varh
+    device_class: NONE
+    state_class: total_increasing
+
+  - name: events
+    input_type: Holding
+    register: 40293
+    length: 2
+    format: UInt32

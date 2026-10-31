@@ -316,6 +316,7 @@ pub async fn read_device_registers(
         // Process the response - use f64 to handle all numeric types
         let parsed_value: Result<f64, String>;
         let mut string_value: Option<String> = None;
+        let mut integer_value: Option<u64> = None;
 
         raw_data.registers.push( E2MRegister { address: reg.register as i32, data: response.clone() });
 
@@ -341,22 +342,31 @@ pub async fn read_device_registers(
                     },
                 }
             },
-            registers::ModbusRegisterFormat::Int32 => {
+            registers::ModbusRegisterFormat::Int32
+            | registers::ModbusRegisterFormat::UInt32
+            | registers::ModbusRegisterFormat::UInt64
+            | registers::ModbusRegisterFormat::Float32 => {
                 let mut data = Vec::new();
-                match mreq.parse_i16(&response, &mut data) {
-                    Err(e) => {
-                        parsed_value = Err(format!("{:?}", e));
-                    }
-                    Ok(()) => {
-                        if data.len() < 2 {
-                            error!("Register {} is malformed, length is less then INT32 type", reg.name);
-                            parsed_value = Err(format!("Register {} is malformed, length is less then INT32", reg.name))
+                parsed_value = mreq
+                    .parse_u16(&response, &mut data)
+                    .map_err(|e| format!("{:?}", e))
+                    .and_then(|()| {
+                        let length = if reg.format == registers::ModbusRegisterFormat::UInt64 {
+                            4
                         } else {
-                            let v = ((data[0] as i32) << 16) | (data[1] as u16 as i32);
-                            parsed_value = Ok(v as f64);
-                        }
-                    }
-                }
+                            2
+                        };
+                        let bits = utils::decode_register_words(&data, length, reg.word_order)?;
+                        Ok(match reg.format {
+                            registers::ModbusRegisterFormat::Int32 => (bits as i32) as f64,
+                            registers::ModbusRegisterFormat::Float32 => f32::from_bits(bits as u32) as f64,
+                            registers::ModbusRegisterFormat::UInt64 => {
+                                integer_value = Some(bits);
+                                bits as f64
+                            },
+                            _ => bits as f64,
+                        })
+                    });
             },
             registers::ModbusRegisterFormat::Int16 => {
                 let mut data = Vec::new();
@@ -369,23 +379,6 @@ pub async fn read_device_registers(
                     }
                 }
             },
-            registers::ModbusRegisterFormat::UInt32 => {
-                let mut data = Vec::new();
-                match mreq.parse_u16(&response, &mut data) {
-                    Err(e) => {
-                        parsed_value = Err(format!("{:?}", e));
-                    }
-                    Ok(()) => {
-                        if data.len() < 2 {
-                            error!("Register {} is malformed, length is less then UInt32 type", reg.name);
-                            parsed_value = Err(format!("Register {} is malformed, length is less then UInt32f", reg.name))
-                        } else {
-                            let v = ((data[0] as u32) << 16) | (data[1] as u32);
-                            parsed_value = Ok(v as f64);
-                        }
-                    }
-                }
-            },
             registers::ModbusRegisterFormat::UInt16 => {
                 let mut data = Vec::new();
                 match mreq.parse_u16(&response, &mut data) {
@@ -394,25 +387,6 @@ pub async fn read_device_registers(
                     }
                     Ok(()) => {
                         parsed_value = Ok(data[0] as f64);
-                    }
-                }
-            },
-            registers::ModbusRegisterFormat::Float32 => {
-                let mut data = Vec::new();
-                match mreq.parse_u16(&response, &mut data) {
-                    Err(e) => {
-                        parsed_value = Err(format!("{:?}", e));
-                    }
-                    Ok(()) => {
-                        if data.len() < 2 {
-                            error!("Register {} is malformed, length is less then Float32 type", reg.name);
-                            parsed_value = Err(format!("Register {} is malformed, length is less then Float32", reg.name))
-                        } else {
-                            // IEEE 754 float32: combine two u16 registers (big-endian)
-                            let bits = ((data[0] as u32) << 16) | (data[1] as u32);
-                            let v = f32::from_bits(bits);
-                            parsed_value = Ok(v as f64);
-                        }
                     }
                 }
             },
@@ -510,7 +484,18 @@ pub async fn read_device_registers(
         {
 
             let v = round_number(scaled_value, reg.precision);
-            let mut value = serde_json::Value::from(v);
+            // Keep unscaled 64-bit counters exact in JSON, including above 2^53.
+            // Expressions still use the existing floating-point context.
+            let mut value = match integer_value {
+                Some(integer)
+                    if reg.scale_factor.is_none()
+                        && reg.scaler == 1.0
+                        && reg.mappings.is_empty() =>
+                {
+                    serde_json::Value::from(integer)
+                },
+                _ => serde_json::Value::from(v),
+            };
 
             let mut found = false;
             for mapping in reg.mappings.iter() {

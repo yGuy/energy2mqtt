@@ -7,6 +7,11 @@ pub async fn get_cmp_from_reg(reg: Register, discover: &mut HaSensor,
                         sender: &Sender<(String, String)>, hub_sender: &Sender<Transmission>,
                         hub_name: &String, device_name: &String) {
 
+    // Scale factors are internal and never appear in the state payload.
+    if matches!(&reg, Register::Modbus(r) if r.format == registers::ModbusRegisterFormat::SunSSF) {
+        return;
+    }
+
     let (platform, name, device_class,
         unit_of_measurement, state_class,
         value_template, options,

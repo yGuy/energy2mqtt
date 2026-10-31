@@ -1,0 +1,327 @@
+# SolarEdge inverter, EnergyExporter Index: 0.
+# Addresses are zero-based PDU addresses; do not subtract or add 1.
+# Derived from MarcusWichelmann/EnergyExporter (MIT); see LICENSE.EnergyExporter.
+# See README.md for scope, configuration, and register-map references.
+# Scale factors must precede the values that reference them.
+manufacturer: SolarEdge
+model: SunSpec inverter (integer map)
+registers:
+  - name: ac_current_sf
+    input_type: Holding
+    register: 40075
+    length: 1
+    format: SunSSF
+
+  - name: ac_voltage_p1_to_p2_sf
+    input_type: Holding
+    register: 40082
+    length: 1
+    format: SunSSF
+
+  - name: ac_power_sf
+    input_type: Holding
+    register: 40084
+    length: 1
+    format: SunSSF
+
+  - name: ac_frequency_sf
+    input_type: Holding
+    register: 40086
+    length: 1
+    format: SunSSF
+
+  - name: ac_power_apparent_sf
+    input_type: Holding
+    register: 40088
+    length: 1
+    format: SunSSF
+
+  - name: ac_power_reactive_sf
+    input_type: Holding
+    register: 40090
+    length: 1
+    format: SunSSF
+
+  - name: ac_power_factor_sf
+    input_type: Holding
+    register: 40092
+    length: 1
+    format: SunSSF
+
+  - name: ac_total_energy_produced_sf
+    input_type: Holding
+    register: 40095
+    length: 1
+    format: SunSSF
+
+  - name: dc_current_sf
+    input_type: Holding
+    register: 40097
+    length: 1
+    format: SunSSF
+
+  - name: dc_voltage_sf
+    input_type: Holding
+    register: 40099
+    length: 1
+    format: SunSSF
+
+  - name: dc_power_sf
+    input_type: Holding
+    register: 40101
+    length: 1
+    format: SunSSF
+
+  - name: heat_sink_temperature_sf
+    input_type: Holding
+    register: 40106
+    length: 1
+    format: SunSSF
+
+  - name: manufacturer
+    input_type: Holding
+    register: 40004
+    length: 16
+    format: String
+
+  - name: model
+    input_type: Holding
+    register: 40020
+    length: 16
+    format: String
+
+  - name: version
+    input_type: Holding
+    register: 40044
+    length: 8
+    format: String
+
+  - name: serial_number
+    input_type: Holding
+    register: 40052
+    length: 16
+    format: String
+
+  - name: device_address
+    input_type: Holding
+    register: 40068
+    length: 1
+    format: UInt16
+
+  - name: type
+    input_type: Holding
+    register: 40069
+    length: 1
+    format: UInt16
+
+  - name: ac_current
+    input_type: Holding
+    register: 40071
+    length: 1
+    format: UInt16
+    scale_factor: ac_current_sf
+    unit_of_measurement: A
+    device_class: current
+    state_class: measurement
+
+  - name: ac_current_p1
+    input_type: Holding
+    register: 40072
+    length: 1
+    format: UInt16
+    scale_factor: ac_current_sf
+    unit_of_measurement: A
+    device_class: current
+    state_class: measurement
+
+  - name: ac_current_p2
+    input_type: Holding
+    register: 40073
+    length: 1
+    format: UInt16
+    scale_factor: ac_current_sf
+    unit_of_measurement: A
+    device_class: current
+    state_class: measurement
+
+  - name: ac_current_p3
+    input_type: Holding
+    register: 40074
+    length: 1
+    format: UInt16
+    scale_factor: ac_current_sf
+    unit_of_measurement: A
+    device_class: current
+    state_class: measurement
+
+  - name: ac_voltage_p1_to_p2
+    input_type: Holding
+    register: 40076
+    length: 1
+    format: UInt16
+    scale_factor: ac_voltage_p1_to_p2_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p2_to_p3
+    input_type: Holding
+    register: 40077
+    length: 1
+    format: UInt16
+    scale_factor: ac_voltage_p1_to_p2_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p3_to_p1
+    input_type: Holding
+    register: 40078
+    length: 1
+    format: UInt16
+    scale_factor: ac_voltage_p1_to_p2_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p1
+    input_type: Holding
+    register: 40079
+    length: 1
+    format: UInt16
+    scale_factor: ac_voltage_p1_to_p2_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p2
+    input_type: Holding
+    register: 40080
+    length: 1
+    format: UInt16
+    scale_factor: ac_voltage_p1_to_p2_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_voltage_p3
+    input_type: Holding
+    register: 40081
+    length: 1
+    format: UInt16
+    scale_factor: ac_voltage_p1_to_p2_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: ac_power
+    input_type: Holding
+    register: 40083
+    length: 1
+    format: Int16
+    scale_factor: ac_power_sf
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: ac_frequency
+    input_type: Holding
+    register: 40085
+    length: 1
+    format: UInt16
+    scale_factor: ac_frequency_sf
+    unit_of_measurement: Hz
+    device_class: frequency
+    state_class: measurement
+
+  - name: ac_power_apparent
+    input_type: Holding
+    register: 40087
+    length: 1
+    format: Int16
+    scale_factor: ac_power_apparent_sf
+    unit_of_measurement: VA
+    device_class: apparent_power
+    state_class: measurement
+
+  - name: ac_power_reactive
+    input_type: Holding
+    register: 40089
+    length: 1
+    format: Int16
+    scale_factor: ac_power_reactive_sf
+    unit_of_measurement: var
+    device_class: reactive_power
+    state_class: measurement
+
+  - name: ac_power_factor
+    input_type: Holding
+    register: 40091
+    length: 1
+    format: Int16
+    scale_factor: ac_power_factor_sf
+    unit_of_measurement: '%'
+    device_class: power_factor
+    state_class: measurement
+
+  - name: ac_total_energy_produced
+    input_type: Holding
+    register: 40093
+    length: 2
+    format: UInt32
+    scale_factor: ac_total_energy_produced_sf
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: dc_current
+    input_type: Holding
+    register: 40096
+    length: 1
+    format: UInt16
+    scale_factor: dc_current_sf
+    unit_of_measurement: A
+    device_class: current
+    state_class: measurement
+
+  - name: dc_voltage
+    input_type: Holding
+    register: 40098
+    length: 1
+    format: UInt16
+    scale_factor: dc_voltage_sf
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: dc_power
+    input_type: Holding
+    register: 40100
+    length: 1
+    format: Int16
+    scale_factor: dc_power_sf
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: heat_sink_temperature
+    input_type: Holding
+    register: 40103
+    length: 1
+    format: Int16
+    scale_factor: heat_sink_temperature_sf
+    unit_of_measurement: °C
+    device_class: temperature
+    state_class: measurement
+
+  - name: status
+    input_type: Holding
+    register: 40107
+    length: 1
+    format: UInt16
+
+  - name: vendor_status
+    input_type: Holding
+    register: 40108
+    length: 1
+    format: UInt16

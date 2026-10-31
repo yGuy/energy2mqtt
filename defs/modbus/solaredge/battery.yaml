@@ -1,0 +1,217 @@
+# SolarEdge battery, EnergyExporter Index: 0.
+# Addresses are zero-based PDU addresses; do not subtract or add 1.
+# Derived from MarcusWichelmann/EnergyExporter (MIT); see LICENSE.EnergyExporter.
+# See README.md for scope, configuration, and register-map references.
+# Numeric values use low-word-first order, with big-endian bytes in each word.
+manufacturer: SolarEdge
+model: StorEdge battery 1
+registers:
+  - name: manufacturer
+    input_type: Holding
+    register: 57600
+    length: 16
+    format: String
+
+  - name: model
+    input_type: Holding
+    register: 57616
+    length: 16
+    format: String
+
+  - name: version
+    input_type: Holding
+    register: 57632
+    length: 16
+    format: String
+
+  - name: serial_number
+    input_type: Holding
+    register: 57648
+    length: 16
+    format: String
+
+  - name: device_address
+    input_type: Holding
+    register: 57664
+    length: 1
+    format: UInt16
+
+  - name: rated_capacity
+    input_type: Holding
+    register: 57666
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total
+
+  - name: max_charge_continuous_power
+    input_type: Holding
+    register: 57668
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: max_discharge_continuous_power
+    input_type: Holding
+    register: 57670
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: max_charge_peak_power
+    input_type: Holding
+    register: 57672
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: max_discharge_peak_power
+    input_type: Holding
+    register: 57674
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: avg_temperature
+    input_type: Holding
+    register: 57708
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: °C
+    device_class: temperature
+    state_class: measurement
+
+  - name: max_temperature
+    input_type: Holding
+    register: 57710
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: °C
+    device_class: temperature
+    state_class: measurement
+
+  - name: voltage
+    input_type: Holding
+    register: 57712
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+
+  - name: current
+    input_type: Holding
+    register: 57714
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: A
+    device_class: current
+    state_class: measurement
+
+  - name: power
+    input_type: Holding
+    register: 57716
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+
+  - name: lifetime_exported_energy
+    input_type: Holding
+    register: 57718
+    length: 4
+    format: UInt64
+    word_order: LowFirst
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: lifetime_imported_energy
+    input_type: Holding
+    register: 57722
+    length: 4
+    format: UInt64
+    word_order: LowFirst
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total_increasing
+
+  - name: capacity
+    input_type: Holding
+    register: 57726
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total
+
+  - name: charge
+    input_type: Holding
+    register: 57728
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: Wh
+    device_class: energy
+    state_class: total
+
+  - name: capacity_percent
+    input_type: Holding
+    register: 57730
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: '%'
+    device_class: NONE
+    state_class: measurement
+
+  - name: charge_percent
+    input_type: Holding
+    register: 57732
+    length: 2
+    format: Float32
+    word_order: LowFirst
+    unit_of_measurement: '%'
+    device_class: battery
+    state_class: measurement
+
+  - name: status
+    input_type: Holding
+    register: 57734
+    length: 2
+    format: UInt32
+    word_order: LowFirst
+
+  - name: vendor_status
+    input_type: Holding
+    register: 57736
+    length: 2
+    format: UInt32
+    word_order: LowFirst
+
+  - name: last_event
+    input_type: Holding
+    register: 57738
+    length: 1
+    format: UInt16
