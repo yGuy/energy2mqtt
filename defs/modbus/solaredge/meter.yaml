@@ -565,7 +565,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: imported_energy_reactive_q1_p1
@@ -575,7 +575,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: imported_energy_reactive_q1_p2
@@ -585,7 +585,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: imported_energy_reactive_q1_p3
@@ -595,7 +595,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: imported_energy_reactive_q2
@@ -605,7 +605,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: imported_energy_reactive_q2_p1
@@ -615,7 +615,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: imported_energy_reactive_q2_p2
@@ -625,7 +625,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: imported_energy_reactive_q2_p3
@@ -635,7 +635,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: exported_energy_reactive_q3
@@ -645,7 +645,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: exported_energy_reactive_q3_p1
@@ -655,7 +655,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: exported_energy_reactive_q3_p2
@@ -665,7 +665,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: exported_energy_reactive_q3_p3
@@ -675,7 +675,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: exported_energy_reactive_q4
@@ -685,7 +685,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: exported_energy_reactive_q4_p1
@@ -695,7 +695,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: exported_energy_reactive_q4_p2
@@ -705,7 +705,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: exported_energy_reactive_q4_p3
@@ -715,7 +715,7 @@ registers:
     format: UInt32
     scale_factor: imported_energy_reactive_q1_sf
     unit_of_measurement: varh
-    device_class: NONE
+    device_class: reactive_energy
     state_class: total_increasing
 
   - name: events

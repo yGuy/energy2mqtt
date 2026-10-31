@@ -43,8 +43,8 @@ registers:
     format: Float32
     word_order: LowFirst
     unit_of_measurement: Wh
-    device_class: energy
-    state_class: total
+    device_class: energy_storage
+    state_class: measurement
 
   - name: max_charge_continuous_power
     input_type: Holding
@@ -163,8 +163,8 @@ registers:
     format: Float32
     word_order: LowFirst
     unit_of_measurement: Wh
-    device_class: energy
-    state_class: total
+    device_class: energy_storage
+    state_class: measurement
 
   - name: charge
     input_type: Holding
@@ -173,8 +173,8 @@ registers:
     format: Float32
     word_order: LowFirst
     unit_of_measurement: Wh
-    device_class: energy
-    state_class: total
+    device_class: energy_storage
+    state_class: measurement
 
   - name: capacity_percent
     input_type: Holding

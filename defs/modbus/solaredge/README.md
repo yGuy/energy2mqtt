@@ -32,6 +32,16 @@ integers; scaled values and expression calculations use floating-point arithmeti
 The new word-order setting applies to reads; these definitions expose sensors
 and do not define inverter or battery controls.
 
+Home Assistant metadata distinguishes energy counters from stored energy:
+reactive-energy counters use `reactive_energy` with `varh` and
+`total_increasing`, while battery `rated_capacity`, `capacity`, and `charge`
+use `energy_storage` with `Wh` and `measurement`. Lifetime active-energy
+counters retain `energy` and `total_increasing`. These classes follow the
+[Home Assistant sensor reference](https://contributors.home-assistant.io/core/entities/sensor/).
+Apparent-energy counters in `VAh` and the battery health percentage have no
+matching device class, so they remain generic sensors (`NONE`). The charge
+percentage uses `battery`; status and event codes remain numeric generic sensors.
+
 ## Configuration
 
 Merge the `modbus` section from [examples/solaredge.yaml](../../../examples/solaredge.yaml) into
