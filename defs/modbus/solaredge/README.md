@@ -3,7 +3,9 @@
 These definitions reproduce the fixed register maps used by
 [EnergyExporter](https://github.com/MarcusWichelmann/EnergyExporter/tree/ea6c83be7a881243b3c1c36eaab8c13c01110119/src/EnergyExporter/Devices)
 for an inverter, its first meter, and its first StorEdge battery. They preserve
-EnergyExporter's measurement names, units and numeric status values.
+EnergyExporter's measurement names and units. Statuses are published as numeric
+codes; EnergyExporter's MQTT output publishes enum statuses as text, so consumers
+of those states need an explicit mapping when migrating.
 
 | Definition (`meter` setting) | EnergyExporter configuration | Base address (decimal / hex) |
 | --- | --- | --- |
