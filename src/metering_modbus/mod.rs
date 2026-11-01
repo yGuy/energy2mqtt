@@ -13,9 +13,12 @@ pub mod read_device_parms;
 pub mod set_device_parms;
 pub mod ha_config;
 pub mod utils;
+pub mod transport;
 
 #[cfg(test)]
 mod solaredge_tests;
+#[cfg(test)]
+mod recovery_tests;
 
 /// Errors that can occur during Modbus communication
 #[derive(Debug)]
@@ -53,6 +56,11 @@ pub struct HubConnectionState {
     connection_timeout: Duration,
     read_timeout: Duration,
     consecutive_failures: u32,
+    retry_initial: Duration,
+    retry_max: Duration,
+    next_retry: Option<tokio::time::Instant>,
+    first_failure: Option<tokio::time::Instant>,
+    restart_after: Duration,
 }
 
 impl HubConnectionState {
@@ -62,6 +70,12 @@ impl HubConnectionState {
             connection_timeout: Duration::from_secs(config.connection_timeout),
             read_timeout: Duration::from_secs(config.read_timeout),
             consecutive_failures: 0,
+            retry_initial: Duration::from_secs(config.retry_backoff_initial_seconds.clamp(1, 86400)),
+            retry_max: Duration::from_secs(config.retry_backoff_max_seconds.clamp(1, 86400)
+                .max(config.retry_backoff_initial_seconds.clamp(1, 86400))),
+            next_retry: None,
+            first_failure: None,
+            restart_after: Duration::from_secs(config.restart_after_seconds),
         }
     }
 
@@ -71,10 +85,27 @@ impl HubConnectionState {
 
     fn record_success(&mut self) {
         self.consecutive_failures = 0;
+        self.next_retry = None;
+        self.first_failure = None;
     }
 
     fn record_failure(&mut self) {
-        self.consecutive_failures += 1;
+        self.clear_connection();
+        self.consecutive_failures = self.consecutive_failures.saturating_add(1);
+        let now = tokio::time::Instant::now();
+        self.first_failure.get_or_insert(now);
+        let multiplier = 1_u32 << self.consecutive_failures.saturating_sub(1).min(31);
+        let delay = self.retry_initial.saturating_mul(multiplier).min(self.retry_max);
+        self.next_retry = Some(now + delay);
+    }
+
+    fn retry_ready(&self) -> bool {
+        self.next_retry.map_or(true, |when| tokio::time::Instant::now() >= when)
+    }
+
+    fn restart_due(&self) -> bool {
+        !self.restart_after.is_zero()
+            && self.first_failure.is_some_and(|when| when.elapsed() >= self.restart_after)
     }
 }
 
@@ -265,7 +296,7 @@ impl ModbusManger
                                 _ =  tokio::time::sleep(hub_delay) => {
                                     // Increment wait counters for all devices
                                     for device in hub.devices.iter_mut() {
-                                        device.cur_waits += 1;
+                                        device.cur_waits = device.cur_waits.saturating_add(1);
                                     }
                                 },
                                 // We got a write command, we may miss a beat but that is ok
@@ -356,10 +387,10 @@ impl ModbusManger
                             ).await;
 
 
-                            // Log connection health if there are failures
-                            if conn_state.consecutive_failures > 0 {
-                                warn!("Hub {}: {} consecutive failures",
-                                    hub.config.name, conn_state.consecutive_failures);
+                            if conn_state.restart_due() {
+                                error!("Hub {}: continuous Modbus failures exceeded {} seconds; exiting for supervisor restart",
+                                    hub.config.name, hub.config.restart_after_seconds);
+                                std::process::exit(1);
                             }
                         }
                     }
@@ -448,6 +479,7 @@ fn change_register(command: &ModbusMqttCommand, device: &mut ModbusDevice, inser
                                 cloned_register.length = change.length;
                                 cloned_register.format = change.format.clone();
                                 cloned_register.word_order = change.word_order;
+                                cloned_register.invalid_values = change.invalid_values.clone();
                                 cloned_register.scaler = change.scaler;
 
                                 info!("Replacing register definition for {} @ {}", change.name, change.register);
@@ -474,6 +506,7 @@ fn change_register(command: &ModbusMqttCommand, device: &mut ModbusDevice, inser
                 format: change.format.clone(),
                 endianess: change.endianess.clone(),
                 word_order: change.word_order,
+                invalid_values: change.invalid_values.clone(),
                 scaler: change.scaler,
                 precision: change.precision,
                 scale_factor: change.scale_factor.clone(),

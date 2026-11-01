@@ -79,8 +79,55 @@ Existing MQTT consumers will need their topics and payload handling updated.
 Meter import/export counters and signed power are forwarded with the source
 map's meaning; verify the meter's installation role and orientation before using
 these readings in energy calculations. Unimplemented phase registers and SunSpec
-sentinel values are currently forwarded by the generic reader without filtering,
-as in the source exporter; choose the applicable sensors for your installation.
+sentinel values configured in `invalid_values` are published as JSON `null`, not
+as extreme numbers. Non-finite floats and values with unavailable/invalid scale
+factors also become `null`; Home Assistant renders these numeric sensors as
+unknown. Zero remains a valid nighttime reading. Choose the applicable phase
+sensors for your installation.
+
+## Connection recovery and Docker restarts
+
+Modbus TCP frames are assembled with exact-length reads and a deadline for the
+whole response. Transaction IDs, unit/function, response byte counts and RTU
+checksums (for RTU-over-TCP) are checked before decoding. Communication or parse
+errors discard the connection and abort that device's snapshot; the next retry
+uses a fresh connection. A successfully opened socket alone does not reset the
+failure episode.
+
+The following optional **hub** settings are included in the example:
+
+```yaml
+retry_backoff_initial_seconds: 2
+retry_backoff_max_seconds: 60
+restart_after_seconds: 900
+```
+
+Failures delay retries by 2, 4, 8, 16, 32, then 60 seconds, capped at 60. The normal
+poll tick is also respected, so short delays are rounded up to a polling
+opportunity. A successful retry resets the delay and failure episode. Defaults
+without these settings are 1 and 60 seconds; back-off settings are bounded to
+1–86400 seconds. Recognized unimplemented data values are not communication errors
+and do not cause reconnects.
+
+`restart_after_seconds: 900` makes the **whole process exit with code 1** if a hub
+has not recovered from its failure episode for 15 minutes, checked between polls.
+This is an optional supervisor fallback; its default `0` disables process exit.
+In a multi-hub installation, enabling it on one hub can restart all modules.
+
+The [Compose example](../../../examples/docker-compose.solaredge.yaml) uses
+`restart: unless-stopped`, keeps routine MQTT logging quiet, and limits Docker's
+log storage. From the project root, put your updated configuration in
+`config/e2m.yaml` and run:
+
+```sh
+docker compose -f examples/docker-compose.solaredge.yaml up -d --build
+```
+
+Existing deployments need the rebuilt image and updated YAML in their mounted
+configuration directory. Docker restarts on the process exit; a manual
+`docker stop` intentionally suppresses restart. An unhealthy healthcheck alone
+does not trigger a standalone Docker restart policy. See
+[Docker's restart-policy documentation](https://docs.docker.com/engine/containers/start-containers-automatically/).
 
 ## Validation and references
 

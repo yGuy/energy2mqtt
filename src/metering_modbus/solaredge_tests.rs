@@ -372,3 +372,57 @@ fn example_config_shares_one_connection_and_polls_every_ten_seconds() {
         assert_eq!(device.read_interval, 10);
     }
 }
+
+#[tokio::test]
+async fn inverter_sentinels_and_invalid_scales_publish_null_instead_of_extremes() {
+    let words = BTreeMap::from([
+        (40075, 0x8000), // invalid current scale
+        (40071, 1234),
+        (40083, 0x8000), // invalid signed power
+        (40085, 0xffff), // invalid unsigned frequency
+        (40093, 0xffff),
+        (40094, 0xffff), // invalid energy
+    ]);
+    let values = read_fixture("inverter", words).await;
+    for field in [
+        "ac_current",
+        "ac_power",
+        "ac_frequency",
+        "ac_total_energy_produced",
+    ] {
+        assert!(
+            values[field].is_null(),
+            "{field} must not publish a bogus extreme or unscaled value"
+        );
+    }
+    assert_eq!(
+        values["dc_power"], 0.0,
+        "Zero is a legitimate nighttime reading"
+    );
+}
+
+#[tokio::test]
+async fn battery_sentinels_and_non_finite_values_publish_null() {
+    let mut words = BTreeMap::from([
+        (57718, 0xffff),
+        (57719, 0xffff),
+        (57720, 0xffff),
+        (57721, 0xffff),
+    ]);
+    low_float(&mut words, 57708, f32::MIN);
+    low_float(&mut words, 57712, f32::NAN);
+    low_float(&mut words, 57714, f32::INFINITY);
+    let values = read_fixture("battery", words).await;
+    for field in [
+        "avg_temperature",
+        "voltage",
+        "current",
+        "lifetime_exported_energy",
+    ] {
+        assert!(
+            values[field].is_null(),
+            "{field} must not contaminate statistics"
+        );
+    }
+    assert_eq!(values["power"], 0.0);
+}

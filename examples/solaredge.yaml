@@ -12,6 +12,9 @@ modbus:
       host: 192.0.2.10
       port: 502
       proto: TCP
+      retry_backoff_initial_seconds: 2
+      retry_backoff_max_seconds: 60
+      restart_after_seconds: 900
       devices:
         - name: solaredge_inverter
           meter: solaredge/inverter

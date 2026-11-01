@@ -35,12 +35,14 @@ registers:
     register: 57664
     length: 1
     format: UInt16
+    invalid_values: [65535]
 
   - name: rated_capacity
     input_type: Holding
     register: 57666
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: Wh
     device_class: energy_storage
@@ -51,6 +53,7 @@ registers:
     register: 57668
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: W
     device_class: power
@@ -61,6 +64,7 @@ registers:
     register: 57670
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: W
     device_class: power
@@ -71,6 +75,7 @@ registers:
     register: 57672
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: W
     device_class: power
@@ -81,6 +86,7 @@ registers:
     register: 57674
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: W
     device_class: power
@@ -91,6 +97,7 @@ registers:
     register: 57708
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: °C
     device_class: temperature
@@ -101,6 +108,7 @@ registers:
     register: 57710
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: °C
     device_class: temperature
@@ -111,6 +119,7 @@ registers:
     register: 57712
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: V
     device_class: voltage
@@ -121,6 +130,7 @@ registers:
     register: 57714
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: A
     device_class: current
@@ -131,6 +141,7 @@ registers:
     register: 57716
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: W
     device_class: power
@@ -141,6 +152,7 @@ registers:
     register: 57718
     length: 4
     format: UInt64
+    invalid_values: [18446744073709551615]
     word_order: LowFirst
     unit_of_measurement: Wh
     device_class: energy
@@ -151,6 +163,7 @@ registers:
     register: 57722
     length: 4
     format: UInt64
+    invalid_values: [18446744073709551615]
     word_order: LowFirst
     unit_of_measurement: Wh
     device_class: energy
@@ -161,6 +174,7 @@ registers:
     register: 57726
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: Wh
     device_class: energy_storage
@@ -171,6 +185,7 @@ registers:
     register: 57728
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: Wh
     device_class: energy_storage
@@ -181,6 +196,7 @@ registers:
     register: 57730
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: '%'
     device_class: NONE
@@ -191,6 +207,7 @@ registers:
     register: 57732
     length: 2
     format: Float32
+    invalid_values: [-3.4028234663852886e+38]
     word_order: LowFirst
     unit_of_measurement: '%'
     device_class: battery
@@ -201,6 +218,7 @@ registers:
     register: 57734
     length: 2
     format: UInt32
+    invalid_values: [4294967295]
     word_order: LowFirst
 
   - name: vendor_status
@@ -208,6 +226,7 @@ registers:
     register: 57736
     length: 2
     format: UInt32
+    invalid_values: [4294967295]
     word_order: LowFirst
 
   - name: last_event
@@ -215,3 +234,4 @@ registers:
     register: 57738
     length: 1
     format: UInt16
+    invalid_values: [65535]

@@ -1,7 +1,7 @@
 use std::{collections::HashMap, time::Duration};
 use log::{debug, error, info};
-use rmodbus::{ModbusProto, client::ModbusRequest, guess_response_frame_len};
-use tokio::{io::{AsyncReadExt, AsyncWriteExt}, net::TcpStream, time::timeout};
+use rmodbus::{ModbusProto, client::ModbusRequest};
+use tokio::net::TcpStream;
 
 use crate::metering_modbus::{HubConnectionState, ModbusDevice, ModbusError, read_device_parms, registers::{ModbusRegisterType, Register}};
 
@@ -13,20 +13,16 @@ pub async fn set(
     proto: ModbusProto,
     conn_state: &mut HubConnectionState,
 ){
+    if !conn_state.retry_ready() { return; }
     // Ensure we have a connection (reuse existing or establish new)
     if conn_state.stream.is_none() {
-        match read_device_parms::connect_to_hub_with_retry(
-            socket_addr,
-            hub_name,
-            conn_state.connection_timeout
-        ).await {
+        match read_device_parms::connect_to_hub(socket_addr, conn_state.connection_timeout).await {
             Ok(s) => {
                 info!("Hub {}: Connection established", hub_name);
                 conn_state.stream = Some(s);
-                conn_state.consecutive_failures = 0;
             }
             Err(e) => {
-                error!("Hub {}: Failed to establish connection after retries: {:?}", hub_name, e);
+                error!("Hub {}: Failed to establish connection: {:?}", hub_name, e);
                 conn_state.record_failure();
                 return;
             }
@@ -51,6 +47,7 @@ pub async fn set(
                 debug!("Got register to write ... {address}");
 
                 let mut mreq = ModbusRequest::new(device.config.slave_id, proto);
+                mreq.tr_id = super::transport::next_transaction_id();
                 let value_u16 = match value.len() {
                     1 => value[0] as u16,
                     2 => u16::from_be_bytes([value[0], value[1]]),
@@ -82,14 +79,18 @@ pub async fn set(
                 for _  in 0..device.parameters.write_retries {
                     /* Wait if needed */
                     tokio::time::sleep(Duration::from_millis(device.parameters.write_wait_before)).await;
-                    match write_single_register(stream, request.clone(), proto).await {
+                    match write_single_register(stream, &mreq, &request, conn_state.read_timeout).await {
                         Ok(_) => {
                             info!("Written register {} on Device {} of Hub {}", address, device.config.name, hub_name);
+                            tokio::time::sleep(Duration::from_millis(device.parameters.write_wait_after)).await;
                             break;
                         },
-                        Err(e) => error!("Writing register {} on Device {} of Hub {} failed: {e:?}", address, device.config.name, hub_name),
+                        Err(e) => {
+                            error!("Writing register {} on Device {} of Hub {} failed: {e:?}", address, device.config.name, hub_name);
+                            conn_state.record_failure();
+                            return;
+                        },
                     }
-                    tokio::time::sleep(Duration::from_millis(device.parameters.write_wait_after)).await;
                 }
             }
         }
@@ -97,11 +98,13 @@ pub async fn set(
 }
 
 pub async fn write_register(device: &ModbusDevice, proto: ModbusProto,  conn_state: &mut HubConnectionState, register: &Register, value: Vec<u8> ) {
+    if !conn_state.retry_ready() { return; }
     if let Register::Modbus(r) = register {
 
         let address = r.register;
 
         let mut mreq = ModbusRequest::new(device.config.slave_id, proto);
+        mreq.tr_id = super::transport::next_transaction_id();
         let value_u16 = match value.len() {
             1 => value[0] as u16,
             2 => u16::from_be_bytes([value[0], value[1]]),
@@ -141,79 +144,28 @@ pub async fn write_register(device: &ModbusDevice, proto: ModbusProto,  conn_sta
         for _  in 0..device.parameters.write_retries {
             /* Wait if needed */
             tokio::time::sleep(Duration::from_millis(device.parameters.write_wait_before)).await;
-            match write_single_register(stream, request.clone(), proto).await {
+            match write_single_register(stream, &mreq, &request, conn_state.read_timeout).await {
                 Ok(_) => {
                     info!("Written register {} on Device {}", address, device.config.name);
+                    tokio::time::sleep(Duration::from_millis(device.parameters.write_wait_after)).await;
                     break;
                 },
-                Err(e) => error!("Writing register {} on Device {} of failed: {e:?}", address, device.config.name),
+                Err(e) => {
+                    error!("Writing register {} on Device {} failed: {e:?}", address, device.config.name);
+                    conn_state.record_failure();
+                    return;
+                },
             }
-            tokio::time::sleep(Duration::from_millis(device.parameters.write_wait_after)).await;
         }
     }
 }
 
-async fn write_single_register(stream: &mut TcpStream, request: Vec<u8>, proto: ModbusProto) -> Result<(), ModbusError> {
-
-    let modbus_timeout = Duration::from_millis(1000);
-
-    // Write request with timeout
-    match timeout(modbus_timeout, stream.write_all(&request)).await {
-        Ok(Ok(_)) => {}
-        Ok(Err(e)) => {
-            return Err(ModbusError::WriteFailed(format!(
-                "Failed to write request {request:?}, {e}"
-            )));
-        }
-        Err(_) => {
-            return Err(ModbusError::WriteTimeout(modbus_timeout.as_secs()));
-        }
-    }
-
-    // Read response header with timeout
-    let mut buf = [0u8; 6];
-    let bytes_read = match timeout(modbus_timeout, stream.read(&mut buf)).await {
-        Ok(Ok(n)) => n,
-        Ok(Err(e)) => {
-            return Err(ModbusError::IoError(e));
-        }
-        Err(_) => {
-            return Err(ModbusError::ReadTimeout(modbus_timeout.as_secs()));
-        }
-    };
-
-    if bytes_read == 0 {
-        return Err(ModbusError::ConnectionClosed);
-    }
-
-    let mut response = Vec::new();
-    response.extend_from_slice(&buf[..bytes_read]);
-
-    let len = guess_response_frame_len(&buf, proto)
-        .map_err(|e| ModbusError::ProtocolError(format!(
-            "Failed to determine response length for register{e:?}"
-        )))?;
-
-    if len as usize > bytes_read {
-        let mut rest = vec![0u8; len as usize - bytes_read];
-
-        // Read rest of response with timeout
-        let rest_bytes = match timeout(modbus_timeout, stream.read(&mut rest)).await {
-            Ok(Ok(n)) => n,
-            Ok(Err(e)) => {
-                return Err(ModbusError::IoError(e));
-            }
-            Err(_) => {
-                return Err(ModbusError::ReadTimeout(modbus_timeout.as_secs()));
-            }
-        };
-
-        if rest_bytes == 0 {
-            return Err(ModbusError::ConnectionClosed);
-        }
-
-        response.extend(&rest[..rest_bytes]);
-    }
-
+async fn write_single_register(
+    stream: &mut TcpStream,
+    request: &ModbusRequest,
+    bytes: &[u8],
+    read_timeout: Duration,
+) -> Result<(), ModbusError> {
+    super::transport::exchange(stream, request, bytes, read_timeout).await?;
     Ok(())
 }

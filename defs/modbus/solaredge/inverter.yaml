@@ -11,72 +11,84 @@ registers:
     register: 40075
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: ac_voltage_p1_to_p2_sf
     input_type: Holding
     register: 40082
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: ac_power_sf
     input_type: Holding
     register: 40084
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: ac_frequency_sf
     input_type: Holding
     register: 40086
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: ac_power_apparent_sf
     input_type: Holding
     register: 40088
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: ac_power_reactive_sf
     input_type: Holding
     register: 40090
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: ac_power_factor_sf
     input_type: Holding
     register: 40092
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: ac_total_energy_produced_sf
     input_type: Holding
     register: 40095
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: dc_current_sf
     input_type: Holding
     register: 40097
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: dc_voltage_sf
     input_type: Holding
     register: 40099
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: dc_power_sf
     input_type: Holding
     register: 40101
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: heat_sink_temperature_sf
     input_type: Holding
     register: 40106
     length: 1
     format: SunSSF
+    invalid_values: [-32768]
 
   - name: manufacturer
     input_type: Holding
@@ -107,18 +119,21 @@ registers:
     register: 40068
     length: 1
     format: UInt16
+    invalid_values: [65535]
 
   - name: type
     input_type: Holding
     register: 40069
     length: 1
     format: UInt16
+    invalid_values: [65535]
 
   - name: ac_current
     input_type: Holding
     register: 40071
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_current_sf
     unit_of_measurement: A
     device_class: current
@@ -129,6 +144,7 @@ registers:
     register: 40072
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_current_sf
     unit_of_measurement: A
     device_class: current
@@ -139,6 +155,7 @@ registers:
     register: 40073
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_current_sf
     unit_of_measurement: A
     device_class: current
@@ -149,6 +166,7 @@ registers:
     register: 40074
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_current_sf
     unit_of_measurement: A
     device_class: current
@@ -159,6 +177,7 @@ registers:
     register: 40076
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_voltage_p1_to_p2_sf
     unit_of_measurement: V
     device_class: voltage
@@ -169,6 +188,7 @@ registers:
     register: 40077
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_voltage_p1_to_p2_sf
     unit_of_measurement: V
     device_class: voltage
@@ -179,6 +199,7 @@ registers:
     register: 40078
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_voltage_p1_to_p2_sf
     unit_of_measurement: V
     device_class: voltage
@@ -189,6 +210,7 @@ registers:
     register: 40079
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_voltage_p1_to_p2_sf
     unit_of_measurement: V
     device_class: voltage
@@ -199,6 +221,7 @@ registers:
     register: 40080
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_voltage_p1_to_p2_sf
     unit_of_measurement: V
     device_class: voltage
@@ -209,6 +232,7 @@ registers:
     register: 40081
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_voltage_p1_to_p2_sf
     unit_of_measurement: V
     device_class: voltage
@@ -219,6 +243,7 @@ registers:
     register: 40083
     length: 1
     format: Int16
+    invalid_values: [-32768]
     scale_factor: ac_power_sf
     unit_of_measurement: W
     device_class: power
@@ -229,6 +254,7 @@ registers:
     register: 40085
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: ac_frequency_sf
     unit_of_measurement: Hz
     device_class: frequency
@@ -239,6 +265,7 @@ registers:
     register: 40087
     length: 1
     format: Int16
+    invalid_values: [-32768]
     scale_factor: ac_power_apparent_sf
     unit_of_measurement: VA
     device_class: apparent_power
@@ -249,6 +276,7 @@ registers:
     register: 40089
     length: 1
     format: Int16
+    invalid_values: [-32768]
     scale_factor: ac_power_reactive_sf
     unit_of_measurement: var
     device_class: reactive_power
@@ -259,6 +287,7 @@ registers:
     register: 40091
     length: 1
     format: Int16
+    invalid_values: [-32768]
     scale_factor: ac_power_factor_sf
     unit_of_measurement: '%'
     device_class: power_factor
@@ -269,6 +298,7 @@ registers:
     register: 40093
     length: 2
     format: UInt32
+    invalid_values: [4294967295]
     scale_factor: ac_total_energy_produced_sf
     unit_of_measurement: Wh
     device_class: energy
@@ -279,6 +309,7 @@ registers:
     register: 40096
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: dc_current_sf
     unit_of_measurement: A
     device_class: current
@@ -289,6 +320,7 @@ registers:
     register: 40098
     length: 1
     format: UInt16
+    invalid_values: [65535]
     scale_factor: dc_voltage_sf
     unit_of_measurement: V
     device_class: voltage
@@ -299,6 +331,7 @@ registers:
     register: 40100
     length: 1
     format: Int16
+    invalid_values: [-32768]
     scale_factor: dc_power_sf
     unit_of_measurement: W
     device_class: power
@@ -309,6 +342,7 @@ registers:
     register: 40103
     length: 1
     format: Int16
+    invalid_values: [-32768]
     scale_factor: heat_sink_temperature_sf
     unit_of_measurement: °C
     device_class: temperature
@@ -319,9 +353,11 @@ registers:
     register: 40107
     length: 1
     format: UInt16
+    invalid_values: [65535]
 
   - name: vendor_status
     input_type: Holding
     register: 40108
     length: 1
     format: UInt16
+    invalid_values: [65535]

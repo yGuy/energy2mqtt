@@ -68,6 +68,7 @@ sqlite = { version = "0.37.4", optional = true }
 colored = { version = "3.1.1", default-features = false }
 
 [dev-dependencies]
+tokio = { version = "1.53.2", features = ["test-util"] }
 tempfile = "3.27.0"
 actix-rt = "2.15.0"
 

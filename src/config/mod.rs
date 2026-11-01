@@ -98,6 +98,8 @@ pub enum ModbusProtoConfig {
 fn modbus_hubs_devices_default() -> Vec<ModbusDeviceConfig> { return Vec::new() }
 fn modbus_hub_connection_timeout_default() -> u64 { 10 }
 fn modbus_hub_read_timeout_default() -> u64 { 5 }
+fn modbus_retry_initial_default() -> u64 { 1 }
+fn modbus_retry_max_default() -> u64 { 60 }
 
 #[derive(Deserialize, Serialize, Clone)]
 #[cfg_attr(feature = "api", derive(ToSchema))]
@@ -111,6 +113,13 @@ pub struct ModbusHubConfig
     pub connection_timeout: u64,  // Connection timeout in seconds
     #[serde(default="modbus_hub_read_timeout_default")]
     pub read_timeout: u64,        // Read/write timeout in seconds
+    #[serde(default="modbus_retry_initial_default")]
+    pub retry_backoff_initial_seconds: u64,
+    #[serde(default="modbus_retry_max_default")]
+    pub retry_backoff_max_seconds: u64,
+    /// Exit non-zero after a continuous failure episode; zero disables this.
+    #[serde(default)]
+    pub restart_after_seconds: u64,
     #[serde(default="modbus_hubs_devices_default")]
     pub devices: Vec<ModbusDeviceConfig>
 }

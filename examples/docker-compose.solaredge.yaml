@@ -1,0 +1,18 @@
+services:
+  energy2mqtt:
+    build:
+      context: ..
+    image: energy2mqtt:solaredge
+    restart: unless-stopped
+    ports:
+      - "8240:8240"
+    environment:
+      RUST_LOG: "info,energy2mqtt::mqtt=warn"
+    volumes:
+      # Put your e2m.yaml in energy2mqtt/config/ before starting this example.
+      - ../config:/config
+    logging:
+      driver: local
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -90,6 +90,9 @@ pub struct ModbusRegister {
     pub endianess: Endianess,
     #[serde(default)]
     pub word_order: WordOrder,
+    /// Raw (unscaled) device-specific sentinel values, published as JSON null.
+    #[serde(default)]
+    pub invalid_values: Vec<serde_json::Value>,
     #[serde(default="default_scaler")]
     pub scaler: f32,
     #[serde(default="default_precision")]
